@@ -15,6 +15,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import org.apache.commons.text.StrSubstitutor;
+import org.apache.commons.text.StringSubstitutor;
 import org.flywaydb.core.Flyway;
 import com.prakhar.auth.AuthenticationFilter;
 import com.prakhar.auth.JwtAuthenticator;
@@ -61,7 +62,7 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
         bootstrap.setConfigurationSourceProvider(
                 new SubstitutingSourceProvider(
                         bootstrap.getConfigurationSourceProvider(),
-                        new StrSubstitutor(loadConfigMapFromFile(configPath))));
+                        new StringSubstitutor(loadConfigMapFromFile(configPath))));
         bootstrap.addBundle(new ViewBundle<>());
         bootstrap.addBundle(new AssetsBundle("/assets/", "/", "index.html"));
         bootstrap.addBundle(hibernate);
