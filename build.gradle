@@ -22,6 +22,8 @@ apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 
+
+
 // ====================================================================================================
 // Env config
 // ====================================================================================================
@@ -306,3 +308,10 @@ task getHomeDir {
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
+jar {
+    manifest {
+        attributes(
+                "Main-Class": "prakhar.ECommerceApplication"
+        )
+    }
+}
