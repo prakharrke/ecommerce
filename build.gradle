@@ -14,6 +14,7 @@ buildscript {
     }
 }
 
+
 // ====================================================================================================
 // Plugins
 // ====================================================================================================
@@ -70,7 +71,7 @@ loadConfig.mustRunAfter clean
 
 
 // The main class of the application
-mainClassName = 'prakhar.ECommerceApplication'
+mainClassName = 'com.prakhar.ECommerceApplication'
 
 // ====================================================================================================
 // Global Variables
@@ -89,7 +90,7 @@ compileJava.dependsOn loadConfig
 ///////////
 
 
-group 'com.prakhar'
+group 'com.com.prakhar'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
@@ -310,8 +311,11 @@ build.mustRunAfter clean
 
 jar {
     manifest {
-        attributes(
-                "Main-Class": "prakhar.ECommerceApplication"
+        attributes('Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' '),
+                'Implementation-Version': version,
+                "Main-Class": mainClassName
         )
     }
+
+    from(configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }) {}
 }
