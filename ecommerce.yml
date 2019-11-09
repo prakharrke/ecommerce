@@ -6,6 +6,7 @@ logging:
     com.prakhar: DEBUG
 
 server:
+  type: simple
   applicationContextPath : /*
   rootPath: /app/*
 
