@@ -238,7 +238,7 @@ compileJava.dependsOn flywayMigrate
 // ====================================================================================================
 shadowJar {
     mergeServiceFiles()
-    mainClassName = 'com.prakhar.ECommerce'
+    mainClassName = 'com.prakhar.ECommerceApplication'
     baseName = 'ecommerce'
     classifier ='release'
     version =  version
