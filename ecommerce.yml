@@ -11,9 +11,9 @@ server:
 
 database :
   driverClass: org.postgresql.Driver
-  user: ecommerce
-  password: password
-  url: jdbc:postgresql://localhost:5432/ecommerce_dev
+  user: ${DATABASE_USER}
+  password: ${DATABASE_PSWD}
+  url: ${DATABASE_URL}
   properties:
     charSet: UTF-8
     user: ecommerce
