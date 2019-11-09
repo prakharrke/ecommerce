@@ -77,7 +77,7 @@ mainClassName = 'com.prakhar.ECommerceApplication'
 // Global Variables
 // ====================================================================================================
 
-project.ext.dropwizardVersion = '0.9.2 '
+project.ext.dropwizardVersion = '2.0.0-rc12'
 project.ext.jerseyVersion = '2.23.2'
 
 // ====================================================================================================
