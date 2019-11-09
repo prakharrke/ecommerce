@@ -48,8 +48,11 @@ task dev_env {
 task loadConfig {
     doLast {
         def env = System.getenv("CONFIG_ENV")
+
+        println "########################################################################"
+        println "ENV - ${env}"
         if (env != null) {
-            project.ext.configPath = "config/${env}.env"
+            project.ext.configPath = "Config/${env}.env"
         }
 
         println "------------------------------------------------------------------------"
