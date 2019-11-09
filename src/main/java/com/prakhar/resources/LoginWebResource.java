@@ -36,7 +36,10 @@ public class LoginWebResource {
                            @FormParam("lastName") String lastName) {
         Optional<Person> personOptional = personRepo.findPersonByEmail(email);
         if(personOptional.isPresent()) {
-            return Response.status(409).build();
+            return Response.status(302).location(
+                    UriBuilder.fromPath("/app/accountServices/sign-up").
+                            queryParam("message", "already.registered").build()
+            ).build();
         }
 
         Person person = new Person(email, firstName, lastName, email, password);
@@ -84,9 +87,9 @@ public class LoginWebResource {
 
     @Path("/sign-up")
     @GET
-    public SignUpView signUpView() {
+    public SignUpView signUpView(@QueryParam("message") String message) {
 
-        return new SignUpView("signup.ftl");
+        return new SignUpView("signup.ftl", message);
     }
 
     @Path("/login")
