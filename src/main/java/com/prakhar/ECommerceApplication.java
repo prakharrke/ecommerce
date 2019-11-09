@@ -1,6 +1,14 @@
 package com.prakhar;
 
 import com.google.common.collect.ImmutableList;
+import com.prakhar.auth.AuthenticationFilter;
+import com.prakhar.auth.JwtAuthenticator;
+import com.prakhar.auth.User;
+import com.prakhar.model.Person;
+import com.prakhar.repo.PersonRepo;
+import com.prakhar.resources.HomeResource;
+import com.prakhar.resources.LoginWebResource;
+import com.prakhar.system.Keys;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -14,17 +22,8 @@ import io.dropwizard.hibernate.SessionFactoryFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
-import org.apache.commons.text.StrSubstitutor;
-import org.apache.commons.text.StringSubstitutor;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.flywaydb.core.Flyway;
-import com.prakhar.auth.AuthenticationFilter;
-import com.prakhar.auth.JwtAuthenticator;
-import com.prakhar.auth.User;
-import com.prakhar.model.Person;
-import com.prakhar.repo.PersonRepo;
-import com.prakhar.resources.HomeResource;
-import com.prakhar.resources.LoginWebResource;
-import com.prakhar.system.Keys;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -62,7 +61,7 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
         bootstrap.setConfigurationSourceProvider(
                 new SubstitutingSourceProvider(
                         bootstrap.getConfigurationSourceProvider(),
-                        new StringSubstitutor(loadConfigMapFromFile(configPath))));
+                        new StrSubstitutor(loadConfigMapFromFile(configPath))));
         bootstrap.addBundle(new ViewBundle<>());
         bootstrap.addBundle(new AssetsBundle("/assets/", "/", "index.html"));
         bootstrap.addBundle(hibernate);
