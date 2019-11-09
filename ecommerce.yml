@@ -6,12 +6,6 @@ logging:
     com.prakhar: DEBUG
 
 server:
-  applicationConnectors:
-    - type: http
-      port: 8090
-  adminConnectors:
-    - type: http
-      port: 8091
   applicationContextPath: /*
   rootPath: /app/*
 
