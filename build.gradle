@@ -238,7 +238,7 @@ compileJava.dependsOn flywayMigrate
 // ====================================================================================================
 shadowJar {
     baseName = 'ecommerce'
-    mergeServiceFiles()
+   
 }
 
 // ====================================================================================================
@@ -318,7 +318,7 @@ build.mustRunAfter clean
 
 jar {
     manifest {
-        attributes('Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' '),
+        attributes(
                 'Implementation-Version': version,
                 "Main-Class": mainClassName
         )
