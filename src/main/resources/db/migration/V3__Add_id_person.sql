@@ -1,0 +1,1 @@
+ALTER TABLE person add column id bigint not null;

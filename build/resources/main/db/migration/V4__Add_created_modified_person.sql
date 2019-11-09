@@ -1,0 +1,6 @@
+ALTER TABLE person add column created TIMESTAMP WITH TIME ZONE NOT NULL;
+
+ALTER TABLE person add column modified TIMESTAMP WITH TIME ZONE NOT NULL;
+
+
+
