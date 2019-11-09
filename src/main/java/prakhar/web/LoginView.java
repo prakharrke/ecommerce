@@ -1,14 +1,15 @@
 package prakhar.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginView extends AbstractView {
 
-    private static final Map<String, String> ERROR_MAP = Map.of(
-            "invalid.credentials", "Invalid Credentials. Please try again.",
-            "unregistered", "You are not registered with us. Please Sign Up"
-    );
-
+    private static final Map<String, String> ERROR_MAP = new HashMap<>();
+    static {
+        ERROR_MAP.put("invalid.credentials",  "Invalid Credentials. Please try again.");
+        ERROR_MAP.put("unregistered", "You are not registered with us. Please Sign Up");
+    }
     private String message;
     private LoginView view;
 
