@@ -237,10 +237,12 @@ compileJava.dependsOn flywayMigrate
 // Fat Jar
 // ====================================================================================================
 shadowJar {
+    mergeServiceFiles()
+    mainClassName = 'com.prakhar.ECommerce'
     baseName = 'ecommerce'
-   
+    classifier ='release'
+    version =  version
 }
-
 // ====================================================================================================
 // Unit Tests
 // ====================================================================================================
