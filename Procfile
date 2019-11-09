@@ -1,1 +1,1 @@
-web: java -jar build/libs/ecommerce-1.0-SNAPSHOT.jar
+web: java -jar build/libs/ecommerce-1.0-SNAPSHOT.jar server ecommerce.yml
