@@ -31,7 +31,7 @@
 
     <#if view.getMessage()??>
 
-                <div class="alert alert-danger mt-2 w100" role="alert">
+                <div class="alert alert-danger mt-2" role="alert">
                     ${view.getMessage()}
                 </div>
     </#if>
