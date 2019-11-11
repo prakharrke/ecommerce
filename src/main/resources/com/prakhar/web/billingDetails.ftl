@@ -13,7 +13,7 @@
 
                 <div class="card card-fluid mt-2">
                     <h6 class="card-header">Saved Addresses</h6>
-                    <div class="card-body" id="savedAddresses">
+                    <div class="card-body" id="savedAddresses" style="overflow-y:scroll; max-height : 48vh">
                         <#assign i = view.getPerson().getBillingAddressList()?size>
                         <#if i != 0>
                         <div class="list-group list-group-bordered mb-3">

@@ -46,7 +46,7 @@ public class LoginWebResource {
         personRepo.save(person);
         String jwtToken = jwtAuthenticator.generateJwtToken(person);
         return Response.status(302).location(
-                URI.create("/app/home")).
+                URI.create("/app/billing")).
                 cookie(WebUtils.createNewCookie("token", jwtToken)).
                 build();
     }
@@ -80,7 +80,7 @@ public class LoginWebResource {
 
         String jwtToken = jwtAuthenticator.generateJwtToken(person);
         return Response.status(302).location(
-                URI.create("/app/home")
+                URI.create("/app/billing")
         ).cookie(WebUtils.createNewCookie("token", jwtToken)).build();
 
     }
