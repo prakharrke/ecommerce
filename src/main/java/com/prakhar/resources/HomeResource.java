@@ -1,6 +1,7 @@
 package com.prakhar.resources;
 
 
+import com.prakhar.web.BillingDetailsView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import com.prakhar.auth.User;
@@ -42,5 +43,25 @@ public class HomeResource {
         }
         Person person = personOptional.get();
         return new HomePageView("home.ftl", person);
+    }
+
+    @Path("/billing")
+    @GET
+    @UnitOfWork
+    public BillingDetailsView getProileView(@Auth User user) {
+        String personEmail = user.getEmail();
+        Optional<Person> personOptional = personRepo.findPersonByEmail(personEmail);
+        if(!personOptional.isPresent()) {
+            throw new WebApplicationException(
+                    Response.status(302).location(
+                            URI.create("/app/accountServices/login")
+                    ).cookie(
+                            WebUtils.createNewCookie("token", "")
+                    ).build()
+            );
+        }
+
+        Person person = personOptional.get();
+        return new BillingDetailsView("billingDetails.ftl", person);
     }
 }

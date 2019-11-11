@@ -4,9 +4,10 @@ import com.google.api.client.util.Base64;
 import org.apache.commons.lang3.StringUtils;
 import com.prakhar.utils.PasswordUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @javax.persistence.Entity
@@ -31,6 +32,10 @@ public class Person extends Entity {
 
     @Column
     private String passwordHash;
+
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "person", orphanRemoval = true)
+    @OrderBy("id")
+    private List<BillingAddress> billingAddressList = new ArrayList<>();
 
     public Person(String username, String firstName, String lastName, String email, String password) {
         this.username = username;
@@ -89,4 +94,13 @@ public class Person extends Entity {
         }
         return flag;
     }
+
+    public void addBillingAddress (BillingAddress billingAddress) {
+        this.billingAddressList.add(billingAddress);
+    }
+
+    public List<BillingAddress> getBillingAddressList() {
+        return billingAddressList;
+    }
+
 }

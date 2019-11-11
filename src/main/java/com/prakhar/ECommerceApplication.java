@@ -4,8 +4,11 @@ import com.google.common.collect.ImmutableList;
 import com.prakhar.auth.AuthenticationFilter;
 import com.prakhar.auth.JwtAuthenticator;
 import com.prakhar.auth.User;
+import com.prakhar.model.BillingAddress;
 import com.prakhar.model.Person;
+import com.prakhar.repo.BillingAddressRepo;
 import com.prakhar.repo.PersonRepo;
+import com.prakhar.resources.BillingResource;
 import com.prakhar.resources.HomeResource;
 import com.prakhar.resources.LoginWebResource;
 import com.prakhar.system.Keys;
@@ -33,7 +36,8 @@ import java.util.Properties;
 
 public class ECommerceApplication extends Application<ECommerceConfiguration> {
     public static final ImmutableList<Class<?>> ENTITIES = ImmutableList.of(
-            Person.class
+            Person.class,
+            BillingAddress.class
     );
 
     public static void main(final String[] args) throws Exception {
@@ -104,7 +108,7 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         // * Register Repos
         PersonRepo personRepo = new PersonRepo(hibernate.getSessionFactory());
-
+        BillingAddressRepo billingAddressRepo = new BillingAddressRepo(hibernate.getSessionFactory());
         // *  RegisterResources
         environment.jersey().register(
                 new LoginWebResource(personRepo, jwtAuthenticator)
@@ -113,6 +117,9 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
                 new HomeResource(personRepo)
         );
 
+        environment.jersey().register(
+                new BillingResource(personRepo, billingAddressRepo)
+        );
     }
 
     private static Map<String, String> loadConfigMapFromFile(String configPath) {
