@@ -42,6 +42,13 @@
         </div>
     </form>
 
+    <#if view.getMessage()??>
+
+    <div class="alert alert-danger mt-2 w100" role="alert">
+        ${view.getMessage()}
+    </div>
+</#if>
+
 </main>
 </body>
 </html>
