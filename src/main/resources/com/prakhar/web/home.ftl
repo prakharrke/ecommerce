@@ -4,5 +4,6 @@
         <div class="col-lg-4">
             Welcome ${view.getPerson().getFirstName()}
         </div>
+
     </div>
 <#include "footer.ftl">
