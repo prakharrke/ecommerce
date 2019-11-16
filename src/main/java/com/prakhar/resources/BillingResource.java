@@ -60,7 +60,11 @@ public class BillingResource {
         BillingAddress billingAddress = new BillingAddress(country, addressLine1, addressLine2, city, state, pinCode,
                 phone, firstName, lastName, person);
         person.addBillingAddress(billingAddress);
-        personRepo.save(person);
+        try {
+            personRepo.save(person);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         return Response.status(302).location(
                 URI.create("/app/billing")

@@ -1,23 +1,21 @@
 <#include "header.ftl">
-
 <div class="page-section">
     <div class="row">
         <div class="col-lg-4">
             <div class="card card-fluid">
-                <h6 class="card-header">Navigate</h6>
+                <h6 class="card-header">Details</h6>
                 <nav class="nav nav-tabs flex-column border-0">
-                    <a href="/app/billing" class="nav-link">Billing</a>
-                    <a href="/app/home" class="nav-link active">Products</a>
+                    <a href="/app/admin" class="nav-link active">Products</a>
+                    <a href="/app/admin/create-product" class="nav-link">Create Product</a>
                 </nav>
             </div>
         </div>
-
-        <div class="col-lg-6">
+        <div class="col-lg-8">
 
             <legend>Refurbished Laptops</legend>
             <#list view.getProducts() as product>
             <div class="card card-fluid">
-                <h6 class="card-header"><a href="/app/product/${product.getId()}" class="nav-link">${product.toString()}</a></h6>
+                <h6 class="card-header"><a href="/app/admin/product/${product.getId()}" class="nav-link">${product.toString()}</a></h6>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-4">
@@ -31,17 +29,14 @@
                                 <li class="list-group-item">${product.getScreenSpecifications().toString()}</li>
                             </ul>
 
-                            <div class="row d-flex justify-content-end mt-1 mr-1 mb-1">
-                                <button class="btn btn-primary">Buy Now</button>
-                            </div>
 
                         </div>
                     </div>
                 </div>
             </div>
-            </#list>
-        </div>
+        </#list>
     </div>
+</div>
 </div>
 
 <#include "footer.ftl">

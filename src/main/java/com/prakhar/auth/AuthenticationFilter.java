@@ -45,7 +45,18 @@ public class AuthenticationFilter<P extends Principal> extends AuthFilter<String
 
 
         }
+
         Principal principal = containerRequestContext.getSecurityContext().getUserPrincipal();
+        if(containerRequestContext.getUriInfo().getPath().contains("admin")){
+            User user = (User) principal;
+            if(!user.getEmail().equalsIgnoreCase("prakhar.rke24@gmail.com") && !user.getEmail().equalsIgnoreCase("mukul.dixit@gmail.com")) {
+                throw new WebApplicationException(
+                        Response.status(302).location(
+                                UriBuilder.fromPath("/app/home").build()
+                        ).build()
+                );
+            }
+        }
     }
 
     private String getCredentialsFromHeader(String header) {

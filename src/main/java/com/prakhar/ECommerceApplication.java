@@ -4,13 +4,14 @@ import com.google.common.collect.ImmutableList;
 import com.prakhar.auth.AuthenticationFilter;
 import com.prakhar.auth.JwtAuthenticator;
 import com.prakhar.auth.User;
-import com.prakhar.model.BillingAddress;
-import com.prakhar.model.Person;
+import com.prakhar.model.*;
 import com.prakhar.repo.BillingAddressRepo;
 import com.prakhar.repo.PersonRepo;
+import com.prakhar.repo.ProductRepo;
 import com.prakhar.resources.BillingResource;
 import com.prakhar.resources.HomeResource;
 import com.prakhar.resources.LoginWebResource;
+import com.prakhar.resources.AdminProductResource;
 import com.prakhar.system.Keys;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -27,7 +28,6 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import org.apache.commons.text.StrSubstitutor;
 import org.flywaydb.core.Flyway;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,8 +36,15 @@ import java.util.Properties;
 
 public class ECommerceApplication extends Application<ECommerceConfiguration> {
     public static final ImmutableList<Class<?>> ENTITIES = ImmutableList.of(
+            Entity.class,
             Person.class,
-            BillingAddress.class
+            BillingAddress.class,
+            GraphicDetails.class,
+            InternalMemory.class,
+            OperatingSystem.class,
+            ProcessorDetails.class,
+            Product.class,
+            ScreenSpecifications.class
     );
 
     public static void main(final String[] args) throws Exception {
@@ -90,12 +97,6 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
     public void run(final ECommerceConfiguration configuration,
                     final Environment environment) throws IOException {
 
-        // Running flyway migrate on every run
-        Flyway flyway = new Flyway();
-        flyway.setDataSource(configuration.getDataSourceFactory().getUrl(),
-                configuration.getDataSourceFactory().getUser(),
-                configuration.getDataSourceFactory().getPassword());
-        flyway.migrate();
 
         // auth setup
 
@@ -109,16 +110,21 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
         // * Register Repos
         PersonRepo personRepo = new PersonRepo(hibernate.getSessionFactory());
         BillingAddressRepo billingAddressRepo = new BillingAddressRepo(hibernate.getSessionFactory());
+        ProductRepo productRepo = new ProductRepo(hibernate.getSessionFactory());
         // *  RegisterResources
         environment.jersey().register(
                 new LoginWebResource(personRepo, jwtAuthenticator)
         );
         environment.jersey().register(
-                new HomeResource(personRepo)
+                new HomeResource(personRepo, productRepo)
         );
 
         environment.jersey().register(
                 new BillingResource(personRepo, billingAddressRepo)
+        );
+
+        environment.jersey().register(
+                new AdminProductResource(productRepo)
         );
     }
 

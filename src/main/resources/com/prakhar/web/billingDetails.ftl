@@ -7,7 +7,7 @@
                     <h6 class="card-header">Details</h6>
                     <nav class="nav nav-tabs flex-column border-0">
                         <a href="/app/billing" class="nav-link active">Billing</a>
-                        <a href="#" class="nav-link">Profile</a>
+                        <a href="/app/home" class="nav-link">Products</a>
                     </nav>
                 </div>
 

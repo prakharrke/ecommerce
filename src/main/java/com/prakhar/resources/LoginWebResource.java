@@ -43,7 +43,11 @@ public class LoginWebResource {
         }
 
         Person person = new Person(email, firstName, lastName, email, password);
-        personRepo.save(person);
+        try {
+            personRepo.save(person);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         String jwtToken = jwtAuthenticator.generateJwtToken(person);
         return Response.status(302).location(
                 URI.create("/app/billing")).
