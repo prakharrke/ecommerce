@@ -34,7 +34,7 @@ public class ProductTest {
         ScreenSpecifications screenSpecifications = new ScreenSpecifications("15\"", "LED", "2048", "16:9", laptop);
         GraphicDetails graphicDetails = new GraphicDetails("Intel", "xxxxxxxxx", "Integrated", "2048GB", laptop);
         InternalMemory internalMemory = new InternalMemory("6 GB", "DDR3", laptop);
-        ProcessorDetails processorDetails = new ProcessorDetails("Intel", "latest", "3rd", "42000U", 4, 2.25, 4, laptop);
+        ProcessorDetails processorDetails = new ProcessorDetails("Intel", "latest", "3rd", "42000U", 4, "2.25", "4", laptop);
         OperatingSystem operatingSystem = new OperatingSystem("Windows", "Windows 8", laptop);
         laptop.setScreenSpecifications(screenSpecifications);
         laptop.setGraphicDetails(graphicDetails);
