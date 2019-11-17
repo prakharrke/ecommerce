@@ -67,7 +67,7 @@ public class ProductRepo extends AbstractRepo {
     }
 
     public List<Product> getProducts() {
-        Query query = currentSession().createQuery("from Product");
+        Query query = currentSession().createQuery("from Product order by id desc");
         return query.getResultList();
     }
 
