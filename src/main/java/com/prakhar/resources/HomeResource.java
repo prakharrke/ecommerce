@@ -3,6 +3,7 @@ package com.prakhar.resources;
 
 import com.prakhar.model.Product;
 import com.prakhar.repo.ProductRepo;
+import com.prakhar.system.PersonInjector;
 import com.prakhar.web.BillingDetailsView;
 import com.prakhar.web.ProductDetailView;
 import io.dropwizard.auth.Auth;
@@ -34,19 +35,23 @@ public class HomeResource {
     @Path("home")
     @GET
     @UnitOfWork
-    public HomePageView getHomePage(@Auth User user) {
-        String personEmail = user.getEmail();
-        Optional<Person> personOptional = personRepo.findPersonByEmail(personEmail);
-        if (!personOptional.isPresent()) {
-            throw new WebApplicationException(
-                    Response.status(302).location(
-                            URI.create("/app/accountServices/login")
-                    ).cookie(
-                            WebUtils.createNewCookie("token", "")
-                    ).build()
-            );
+    public HomePageView getHomePage(@Auth Optional<User> userOptional) {
+        Person person=null;
+        if(userOptional.isPresent()){
+            String personEmail = userOptional.get().getEmail();
+            Optional<Person> personOptional = personRepo.findPersonByEmail(personEmail);
+            if (!personOptional.isPresent()) {
+                throw new WebApplicationException(
+                        Response.status(302).location(
+                                URI.create("/app/accountServices/login")
+                        ).cookie(
+                                WebUtils.createNewCookie("token", "")
+                        ).build()
+                );
+            }
+            person = personOptional.get();
         }
-        Person person = personOptional.get();
+
         return new HomePageView("home.ftl", person, productRepo);
     }
 
@@ -73,7 +78,7 @@ public class HomeResource {
     @Path("/product/{productId}")
     @GET
     @UnitOfWork
-    public ProductDetailView getProductDetails(@Auth User user, @PathParam("productId") Long productId) {
+    public ProductDetailView getProductDetails( @Auth Optional<User> userOptional, @PathParam("productId") Long productId) {
         Optional<Product> productOptional = productRepo.findProductById(productId);
         if(!productOptional.isPresent()) {
             throw new WebApplicationException(

@@ -8,6 +8,7 @@
                 <nav class="nav nav-tabs flex-column border-0">
                     <a href="/app/billing" class="nav-link">Billing</a>
                     <a href="/app/home" class="nav-link active">Products</a>
+                    <a href="/app/admin" class="nav-link">Admin Console</a>
                 </nav>
             </div>
         </div>

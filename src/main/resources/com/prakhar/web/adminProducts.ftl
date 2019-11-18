@@ -7,12 +7,13 @@
                 <nav class="nav nav-tabs flex-column border-0">
                     <a href="/app/admin" class="nav-link active">Products</a>
                     <a href="/app/admin/create-product" class="nav-link">Create Product</a>
+                    <a href="/app/home" class="nav-link">Home</a>
                 </nav>
             </div>
         </div>
         <div class="col-lg-8">
 
-            <legend>Refurbished Laptops</legend>
+            <legend>Admin Console</legend>
             <#list view.getProducts() as product>
             <div class="card card-fluid">
                 <h6 class="card-header"><a href="/app/admin/product/${product.getId()}" class="nav-link">${product.toString()}</a></h6>

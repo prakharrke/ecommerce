@@ -1,5 +1,15 @@
 <#include "header.ftl">
     <div class="row d-flex justify-content-center">
+        <div class="col-lg-4">
+            <div class="card card-fluid">
+                <h6 class="card-header">Navigate</h6>
+                <nav class="nav nav-tabs flex-column border-0">
+                    <a href="/app/billing" class="nav-link">Billing</a>
+                    <a href="/app/home" class="nav-link active">Products</a>
+                    <a href="/app/admin" class="nav-link">Admin Console</a>
+                </nav>
+            </div>
+        </div>
         <div class="col-lg-8">
             <div class="card card-fluid">
                 <h6 class="card-header">

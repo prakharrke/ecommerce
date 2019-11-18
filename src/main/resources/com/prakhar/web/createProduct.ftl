@@ -8,6 +8,7 @@
                 <nav class="nav nav-tabs flex-column border-0">
                     <a href="/app/admin" class="nav-link">Products</a>
                     <a href="/app/admin/create-product" class="nav-link active">Create Product</a>
+                    <a href="/app/home" class="nav-link">Home</a>
                 </nav>
             </div>
         </div>

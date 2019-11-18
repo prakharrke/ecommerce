@@ -13,6 +13,8 @@ import com.prakhar.resources.HomeResource;
 import com.prakhar.resources.LoginWebResource;
 import com.prakhar.resources.AdminProductResource;
 import com.prakhar.system.Keys;
+import com.prakhar.system.SessionFactoryHolder;
+import com.prakhar.system.ValueResolverFeature;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -107,6 +109,8 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
                         .setPrefix("Bearer")
                         .buildAuthFilter()));
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+        SessionFactoryHolder.initialize(hibernate.getSessionFactory());
+        environment.jersey().register(ValueResolverFeature.class);
         // * Register Repos
         PersonRepo personRepo = new PersonRepo(hibernate.getSessionFactory());
         BillingAddressRepo billingAddressRepo = new BillingAddressRepo(hibernate.getSessionFactory());

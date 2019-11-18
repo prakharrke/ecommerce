@@ -41,9 +41,6 @@ public class AuthenticationFilter<P extends Principal> extends AuthFilter<String
                         ).build()
                 );
             }
-
-
-
         }
 
         Principal principal = containerRequestContext.getSecurityContext().getUserPrincipal();
