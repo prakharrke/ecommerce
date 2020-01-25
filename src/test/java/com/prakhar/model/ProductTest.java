@@ -4,7 +4,6 @@ import com.prakhar.repo.ProductRepo;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -18,7 +17,7 @@ public class ProductTest {
     @Before
     public void setUp() {
         productRepo = Mockito.mock(ProductRepo.class);
-        laptop = new Product(10000, 20, "ACACACAC", "111111", "HP", TypeProduct.LAPTOP);
+        laptop = new Product(10000, "ACACACAC", "111111", "HP", TypeProduct.LAPTOP);
     }
 
     @Test
@@ -50,5 +49,15 @@ public class ProductTest {
         Assert.assertEquals(productOptional.get().getOperatingSystem(), operatingSystem);
         Assert.assertEquals(productOptional.get().getProcessorDetails(), processorDetails);
         Assert.assertEquals(productOptional.get().getScreenSpecifications(), screenSpecifications);
+    }
+
+    @Test
+    public void addProductItemToProduct() {
+
+        ProductItem productItem = new ProductItem(laptop);
+        productItem.setSerialNumber("xxxxxx");
+        Assert.assertTrue(laptop.getProductItems().size() == 0);
+        laptop.addProductItem(productItem);
+        Assert.assertTrue(laptop.getProductItems().size() == 1);
     }
 }

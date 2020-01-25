@@ -62,14 +62,6 @@
                             <input name="price" type="number" class="form-control" id="price" value=${view.getProduct().getPrice()?c} lang="en" required="">
                         </div>
                     </div>
-                    <div class="form-row">
-
-                        <label for="quantity" class="col-md-3">Quantity</label> <!-- /form column -->
-
-                        <div class="col-md-9 mb-3">
-                            <input name="quantity" type="number" class="form-control" id="quantity" value="${view.getProduct().getQuantity()}" required="">
-                        </div>
-                    </div>
                 </div>
 
                 <div class="card-body border-top">
@@ -264,16 +256,74 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary ml-auto">Update</button>
+                    <button type="submit" class="btn btn-primary ml-auto mt-2 mr-2">Update</button>
+
+                    <form method="post" enctype="application/x-www-form-urlencoded" action="/app/admin/deleteProduct/${view.getProduct().getId()}">
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-danger ml-auto">Delete</button>
+                        </div>
+                    </form>
                 </div>
             </form>
-            <form method="post" enctype="application/x-www-form-urlencoded" action="/app/admin/deleteProduct/${view.getProduct().getId()}">
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-danger ml-auto">Delete</button>
+
+            <div class="card-body border-top mt-4 mb-2">
+            <legend>Add Product Item</legend>
+
+
+                <form method="post" enctype="application/x-www-form-urlencoded" action="/app/admin/addProductItem/${view.getProduct().getId()}">
+                    <div class="form-row">
+
+                        <label for="serialNumber" class="col-md-3">Serial Number</label> <!-- /form column -->
+
+                        <div class="col-md-6 mb-3">
+                            <input name="serialNumber" type="text" class="form-control" id="serialNumber"  required="">
+                        </div>
+
+                        <div class="col-md-3 d-flex justify-content-end">
+
+                                <button type="submit" class="btn btn-primary ml-auto">Update</button>
+
+                    </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-body border-top mt-4 mb-2">
+            <legend>Product Items</legend>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>
+                                Product Id
+                            </th>
+                            <th>
+                                Serial Number
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <#list view.getProduct().getProductItems() as pi>
+                            <tr>
+                                <td>
+                                    ${pi.getId()}
+                                </td>
+                                <td>
+                                    ${pi.getSerialNumber()}
+                                </td>
+                            </tr>
+                        </#list>
+
+                        </tbody>
+                    </table>
                 </div>
-            </form>
+            </div>
+
         </div>
     </div>
+
+
 
 </div>
 

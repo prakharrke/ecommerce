@@ -1,6 +1,9 @@
 package com.prakhar.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @javax.persistence.Entity
 @Table(name = "product")
@@ -9,8 +12,6 @@ public class Product extends Entity {
     @Column
     private double price;
 
-    @Column
-    private int quantity;
 
     @Column
     private String modelSeries;
@@ -40,11 +41,15 @@ public class Product extends Entity {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
     private ProcessorDetails processorDetails;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
+    List<ProductItem> productItems = new ArrayList<>();
 
-    public Product(double price, int quantity, String modelSeries, String modelNumber, String manufacturer, TypeProduct productType) {
+
+
+    public Product(double price, String modelSeries, String modelNumber, String manufacturer, TypeProduct productType) {
 
         this.price = price;
-        this.quantity = quantity;
+
         this.modelSeries = modelSeries;
         this.modelNumber = modelNumber;
         this.manufacturer = manufacturer;
@@ -56,10 +61,6 @@ public class Product extends Entity {
 
     public double getPrice() {
         return price;
-    }
-
-    public int getQuantity() {
-        return quantity;
     }
 
     public String getModelSeries() {
@@ -130,9 +131,6 @@ public class Product extends Entity {
         this.price = price;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 
     public void setModelSeries(String modelSeries) {
         this.modelSeries = modelSeries;
@@ -148,5 +146,13 @@ public class Product extends Entity {
 
     public void setProductType(TypeProduct productType) {
         this.productType = productType;
+    }
+
+    public List<ProductItem> getProductItems() {
+        return Collections.unmodifiableList(productItems);
+    }
+
+    public void addProductItem(ProductItem productItem) {
+        this.productItems.add(productItem);
     }
 }

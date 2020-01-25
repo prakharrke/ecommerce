@@ -2,13 +2,17 @@ package com.prakhar.resources;
 
 import com.prakhar.auth.User;
 import com.prakhar.model.Product;
+import com.prakhar.model.ProductItem;
 import com.prakhar.repo.ProductRepo;
+import com.prakhar.system.SessionManager;
 import com.prakhar.web.AdminCreateProductsView;
 import com.prakhar.web.AdminProductDetailsView;
 import com.prakhar.web.AdminProductsView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+import org.hibernate.Transaction;
 
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,14 +20,17 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Path("/admin")
 public class AdminProductResource {
 
     ProductRepo productRepo;
+    SessionManager sessionManager;
 
-    public AdminProductResource(ProductRepo productRepo) {
+    public AdminProductResource(ProductRepo productRepo, SessionManager sessionManager) {
         this.productRepo = productRepo;
+        this.sessionManager = sessionManager;
     }
 
     @GET
@@ -55,7 +62,7 @@ public class AdminProductResource {
     @POST
     @Path("/createProduct")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @UnitOfWork(transactional = false)
+    @Transactional
     public Response createProduct(@Auth User user,
                                   @FormParam("price") Double price,
                                   @FormParam("quantity") int quantity,
@@ -84,14 +91,28 @@ public class AdminProductResource {
                                   @FormParam("processorCache") String processorCache) {
         try {
 
-            productRepo.createProduct(price, quantity, modelSeries, modelNumber, manufacturer, productType, osType,
-                    osVersion, graphicBrand, graphicType, graphicModel, graphicMemory, internalMemoryType, internalMemoryRam,
-                    screenSize, screenRatio, screenResolution, screenType, processorBrand, processorName, processorGeneration,
-                    processorVariant, processorNumberOfCores, processorSpeed, processorCache);
+
+            sessionManager.inTransaction(() -> {
+                productRepo.createProduct(price, modelSeries, modelNumber, manufacturer, productType, osType,
+                        osVersion, graphicBrand, graphicType, graphicModel, graphicMemory, internalMemoryType, internalMemoryRam,
+                        screenSize, screenRatio, screenResolution, screenType, processorBrand, processorName, processorGeneration,
+                        processorVariant, processorNumberOfCores, processorSpeed, processorCache);
+
+
+            });
+
+
+            AtomicReference<Product> productAtomicReference = new AtomicReference<>();
+            sessionManager.inTransaction(() -> {
+                productAtomicReference.set(productRepo.getProductByModelNumberAndSeries(modelNumber, modelSeries).orElseThrow());
+            });
+
             return Response.status(302).location(
-                    UriBuilder.fromPath("/app/admin/create-product").queryParam("message", "success").build()
+                    UriBuilder.fromPath("/app/admin/product/" + productAtomicReference.get().getId()).build()
             ).build();
+
         } catch (Exception e) {
+            e.printStackTrace();
             throw new WebApplicationException(
                     Response.status(302).location(
                             UriBuilder.fromPath("/app/admin/create-product").queryParam("message", "error").build()
@@ -141,7 +162,7 @@ public class AdminProductResource {
             );
         }
         try {
-            productRepo.updateProduct(productOptional.get(), price, quantity, modelSeries, modelNumber, manufacturer,
+            productRepo.updateProduct(productOptional.get(), price, modelSeries, modelNumber, manufacturer,
                     productType, osType, osVersion, graphicBrand, graphicType, graphicModel, graphicMemory,
                     internalMemoryType, internalMemoryRam, screenSize, screenRatio, screenResolution, screenType,
                     processorBrand, processorName, processorGeneration, processorVariant, processorNumberOfCores,
@@ -176,17 +197,44 @@ public class AdminProductResource {
                     ).build()
             );
         }
-        try{
+        try {
             productRepo.deleteProduct(productOptional.get());
-            return  Response.status(302).location(
+            return Response.status(302).location(
                     URI.create("/app/admin")
             ).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new WebApplicationException(
                     Response.status(302).location(
                             UriBuilder.fromPath("/app/admin/product/" + productId).queryParam("message", "error").build()
                     ).build()
             );
+        }
+    }
+
+    @POST
+    @Path("/addProductItem/{productId}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+
+    public Response addProductItem(@Auth User user,
+                                   @PathParam("productId") Long productId,
+                                   @FormParam("serialNumber") String serialNumber) {
+        try {
+            sessionManager.inTransaction(() -> {
+                Product product = productRepo.findProductById(productId).orElseThrow(() -> new RuntimeException("Product not found with given product id"));
+                ProductItem productItem = new ProductItem(product);
+                productItem.setSerialNumber(serialNumber);
+                product.addProductItem(productItem);
+                productRepo.save(product);
+            });
+
+            return Response.status(302).location(
+                    UriBuilder.fromPath("/app/admin/product/" + productId).queryParam("message", "productItemSuccess").build()
+            ).build();
+
+        } catch (Exception e) {
+            return Response.status(302).location(
+                    UriBuilder.fromPath("/app/admin/product/" + productId).queryParam("message", "productItemError").build()
+            ).build();
         }
     }
 }

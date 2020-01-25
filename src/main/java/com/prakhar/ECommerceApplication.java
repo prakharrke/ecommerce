@@ -8,12 +8,13 @@ import com.prakhar.model.*;
 import com.prakhar.repo.BillingAddressRepo;
 import com.prakhar.repo.PersonRepo;
 import com.prakhar.repo.ProductRepo;
+import com.prakhar.resources.AdminProductResource;
 import com.prakhar.resources.BillingResource;
 import com.prakhar.resources.HomeResource;
 import com.prakhar.resources.LoginWebResource;
-import com.prakhar.resources.AdminProductResource;
 import com.prakhar.system.Keys;
 import com.prakhar.system.SessionFactoryHolder;
+import com.prakhar.system.SessionManager;
 import com.prakhar.system.ValueResolverFeature;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -29,7 +30,6 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import org.apache.commons.text.StrSubstitutor;
-import org.flywaydb.core.Flyway;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,6 +37,8 @@ import java.util.Map;
 import java.util.Properties;
 
 public class ECommerceApplication extends Application<ECommerceConfiguration> {
+
+    private SessionManager sessionManager;
     public static final ImmutableList<Class<?>> ENTITIES = ImmutableList.of(
             Entity.class,
             Person.class,
@@ -46,7 +48,10 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
             OperatingSystem.class,
             ProcessorDetails.class,
             Product.class,
-            ScreenSpecifications.class
+            ScreenSpecifications.class,
+            Cart.class,
+            CartItem.class,
+            ProductItem.class
     );
 
     public static void main(final String[] args) throws Exception {
@@ -111,6 +116,7 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         SessionFactoryHolder.initialize(hibernate.getSessionFactory());
         environment.jersey().register(ValueResolverFeature.class);
+        sessionManager = new SessionManager(hibernate.getSessionFactory());
         // * Register Repos
         PersonRepo personRepo = new PersonRepo(hibernate.getSessionFactory());
         BillingAddressRepo billingAddressRepo = new BillingAddressRepo(hibernate.getSessionFactory());
@@ -128,7 +134,7 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
         );
 
         environment.jersey().register(
-                new AdminProductResource(productRepo)
+                new AdminProductResource(productRepo, sessionManager)
         );
     }
 

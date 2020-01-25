@@ -17,6 +17,8 @@ public class AdminProductDetailsView extends AbstractView {
     static {
         ERROR_MAP.put("error", "Failed to updated product. Please make sure that that model number is unique.");
         ERROR_MAP.put("success", "Product successfully updated.");
+        ERROR_MAP.put("productItemError", "Failed to create product item. Serial number might already be in use");
+        ERROR_MAP.put("productItemSuccess", "Product item with given serial number is successfully created");
     }
     public AdminProductDetailsView(String templateName, Product product, String message) {
         super(templateName);

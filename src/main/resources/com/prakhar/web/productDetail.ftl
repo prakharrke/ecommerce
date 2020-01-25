@@ -16,6 +16,16 @@
                     <div class="text-center">${view.getProduct().toString()}</div>
                 </h6>
                 <div class="card-body border-top">
+
+                    <div class="mt-1 mb-1">
+                        <#if (view.getProduct().getProductItems()?size < 1) >
+                            <h5 style="color : red">Out of stock</h5>
+                        </#if>
+
+                    <#if (view.getProduct().getProductItems()?size > 0 && view.getProduct().getProductItems()?size < 4) >
+                    <h5 style="color : red">Hurry! Only few left</h5>
+                </#if>
+                    </div>
                     <legend>Manufacturer Details</legend>
                     <div class="row mt-2">
                         <div class="col-lg-4">

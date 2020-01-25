@@ -18,8 +18,8 @@ public class ProductRepo extends AbstractRepo {
 
 
     public Optional<Product> getProductByModelNumberAndSeries(String modelNumber, String modelSeries) {
-        Query query = currentSession().createQuery("from product" +
-                " where modelnumber=:modelNumber and modelSeries=:modelSeries");
+        Query<Product> query = currentSession().createQuery("select p from Product p" +
+                " where modelNumber=:modelNumber and modelSeries=:modelSeries");
         query.setParameter("modelNumber", modelNumber);
         query.setParameter("modelSeries", modelSeries);
         return query.uniqueResultOptional();
@@ -32,9 +32,9 @@ public class ProductRepo extends AbstractRepo {
         return query.uniqueResultOptional();
     }
 
-    public void createProduct(Double price, int quantity, String modelSeries, String modelNumber, String manufacturer, String productType, String osType, String osVersion, String graphicBrand, String graphicType, String graphicModel, String graphicMemory, String internalMemoryType, String internalMemoryRam, String screenSize, String screenRatio, String screenResolution, String screenType, String processorBrand, String processorName, String processorGeneration, String processorVariant, int processorNumberOfCores, String processorSpeed, String processorCache) {
+    public void createProduct(Double price, String modelSeries, String modelNumber, String manufacturer, String productType, String osType, String osVersion, String graphicBrand, String graphicType, String graphicModel, String graphicMemory, String internalMemoryType, String internalMemoryRam, String screenSize, String screenRatio, String screenResolution, String screenType, String processorBrand, String processorName, String processorGeneration, String processorVariant, int processorNumberOfCores, String processorSpeed, String processorCache) {
 
-        Product product = new Product(price, quantity, modelSeries, modelNumber, manufacturer, TypeProduct.fromDisplayName(productType));
+        Product product = new Product(price, modelSeries, modelNumber, manufacturer, TypeProduct.fromDisplayName(productType));
 
         OperatingSystem operatingSystem = new OperatingSystem(osType, osVersion, product);
         product.setOperatingSystem(operatingSystem);
@@ -51,7 +51,8 @@ public class ProductRepo extends AbstractRepo {
         ProcessorDetails processorDetails = new ProcessorDetails(processorBrand, processorName, processorGeneration, processorVariant, processorNumberOfCores, processorSpeed, processorCache, product);
         product.setProcessorDetails(processorDetails);
 
-        Transaction transaction = currentSession().getTransaction();
+        save(product);
+        /*Transaction transaction = currentSession().getTransaction();
         if (!transaction.isActive()) {
             transaction.begin();
         }
@@ -63,7 +64,7 @@ public class ProductRepo extends AbstractRepo {
             transaction.rollback();
             throw new RuntimeException(e);
 
-        }
+        }*/
     }
 
     public List<Product> getProducts() {
@@ -71,7 +72,7 @@ public class ProductRepo extends AbstractRepo {
         return query.getResultList();
     }
 
-    public void updateProduct(Product product, Double price, int quantity, String modelSeries, String modelNumber, String manufacturer, String productType, String osType, String osVersion, String graphicBrand, String graphicType, String graphicModel, String graphicMemory, String internalMemoryType, String internalMemoryRam, String screenSize, String screenRatio, String screenResolution, String screenType, String processorBrand, String processorName, String processorGeneration, String processorVariant, int processorNumberOfCores, String processorSpeed, String processorCache) {
+    public void updateProduct(Product product, Double price, String modelSeries, String modelNumber, String manufacturer, String productType, String osType, String osVersion, String graphicBrand, String graphicType, String graphicModel, String graphicMemory, String internalMemoryType, String internalMemoryRam, String screenSize, String screenRatio, String screenResolution, String screenType, String processorBrand, String processorName, String processorGeneration, String processorVariant, int processorNumberOfCores, String processorSpeed, String processorCache) {
         Transaction transaction = currentSession().getTransaction();
         if (!transaction.isActive()) {
             transaction.begin();
@@ -106,10 +107,13 @@ public class ProductRepo extends AbstractRepo {
             product.getProcessorDetails().setVariant(processorVariant);
 
             save(product);
+            transaction.commit();
 
         } catch (Exception e) {
             transaction.rollback();
             throw new RuntimeException(e);
+        }finally {
+
         }
     }
 
@@ -120,6 +124,7 @@ public class ProductRepo extends AbstractRepo {
         }
         try {
             delete(product);
+            transaction.commit();
         }catch (Exception e) {
             transaction.rollback();
             throw new RuntimeException(e);
