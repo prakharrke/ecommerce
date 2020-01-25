@@ -62,6 +62,15 @@
                             <input name="price" type="number" class="form-control" id="price" value=${view.getProduct().getPrice()?c} lang="en" required="">
                         </div>
                     </div>
+
+                    <div class="form-row">
+
+                        <label for="availableQuantity" class="col-md-3">Available Quantity</label> <!-- /form column -->
+
+                        <div class="col-md-9 mb-3">
+                            <input name="availableQuantity" type="number" class="form-control" id="availableQuantity" value=${view.getProduct().getProductItems()?size} lang="en" required="">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body border-top">
