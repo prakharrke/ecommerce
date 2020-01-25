@@ -104,7 +104,7 @@ public class AdminProductResource {
 
             AtomicReference<Product> productAtomicReference = new AtomicReference<>();
             sessionManager.inTransaction(() -> {
-                Product product = productRepo.getProductByModelNumberAndSeries(modelNumber, modelSeries).orElseThrow();
+                Product product = productRepo.getProductByModelNumberAndSeries(modelNumber, modelSeries).orElseThrow(() -> new RuntimeException("No product found with given model number and series"));
                 productAtomicReference.set(product);
             });
 
