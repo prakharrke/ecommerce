@@ -42,4 +42,15 @@ public class CartItem  extends com.prakhar.model.Entity {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public void increaseQuantity() {
+        quantity+=1;
+    }
+
+    public void decreaseQuantity() {
+        if(quantity == 1) {
+            throw new RuntimeException("Quantity already 1. Cannot reduce further. Please remove the product from the cart to reduce further.");
+        }
+        quantity -=1;
+    }
 }

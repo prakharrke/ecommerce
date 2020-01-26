@@ -8,6 +8,7 @@
                 <nav class="nav nav-tabs flex-column border-0">
                     <a href="/app/billing" class="nav-link">Billing</a>
                     <a href="/app/home" class="nav-link active">Products</a>
+                    <a href="/app/cart" class="nav-link">My Cart</a>
                     <a href="/app/admin" class="nav-link">Admin Console</a>
                 </nav>
             </div>
@@ -33,7 +34,9 @@
                             </ul>
 
                             <div class="row d-flex justify-content-end mt-1 mr-1 mb-1">
-                                <button class="btn btn-primary">Buy Now</button>
+                                <form method="get" enctype="application/x-www-form-urlencoded" action="/app/cart/addToCart/${product.getId()}">
+                                <button class="btn btn-primary" type="submit">Add to cart</button>
+                                </form>
                             </div>
 
                         </div>

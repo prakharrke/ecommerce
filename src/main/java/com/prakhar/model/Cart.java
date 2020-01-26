@@ -1,7 +1,9 @@
 package com.prakhar.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @javax.persistence.Entity
@@ -13,7 +15,7 @@ public class Cart extends Entity {
     private Person person;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cart")
-    Set<CartItem> cartItems;
+    List<CartItem> cartItems = new ArrayList<>();
 
 
     public Cart() {
@@ -21,7 +23,7 @@ public class Cart extends Entity {
 
     public Cart(Person person) {
         this.person = person;
-        cartItems = new LinkedHashSet<>();
+        cartItems = new ArrayList<>();
     }
 
     public void setPerson(Person person) {
@@ -32,7 +34,7 @@ public class Cart extends Entity {
         return person;
     }
 
-    public Set<CartItem> getCartItems() {
+    public List<CartItem> getCartItems() {
         return cartItems;
     }
 

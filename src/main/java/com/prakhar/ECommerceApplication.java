@@ -6,12 +6,12 @@ import com.prakhar.auth.JwtAuthenticator;
 import com.prakhar.auth.User;
 import com.prakhar.model.*;
 import com.prakhar.repo.BillingAddressRepo;
+import com.prakhar.repo.CartRepo;
 import com.prakhar.repo.PersonRepo;
 import com.prakhar.repo.ProductRepo;
-import com.prakhar.resources.AdminProductResource;
-import com.prakhar.resources.BillingResource;
-import com.prakhar.resources.HomeResource;
-import com.prakhar.resources.LoginWebResource;
+import com.prakhar.resources.*;
+import com.prakhar.service.CartService;
+import com.prakhar.service.PersonService;
 import com.prakhar.system.Keys;
 import com.prakhar.system.SessionFactoryHolder;
 import com.prakhar.system.SessionManager;
@@ -121,12 +121,15 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
         PersonRepo personRepo = new PersonRepo(hibernate.getSessionFactory());
         BillingAddressRepo billingAddressRepo = new BillingAddressRepo(hibernate.getSessionFactory());
         ProductRepo productRepo = new ProductRepo(hibernate.getSessionFactory());
+        PersonService personService = new PersonService(personRepo, billingAddressRepo);
+        CartRepo cartRepo = new CartRepo(hibernate.getSessionFactory());
+        CartService cartService = new CartService(cartRepo);
         // *  RegisterResources
         environment.jersey().register(
                 new LoginWebResource(personRepo, jwtAuthenticator)
         );
         environment.jersey().register(
-                new HomeResource(personRepo, productRepo)
+                new HomeResource(personRepo, productRepo, personService, cartService, cartRepo)
         );
 
         environment.jersey().register(
@@ -136,6 +139,9 @@ public class ECommerceApplication extends Application<ECommerceConfiguration> {
         environment.jersey().register(
                 new AdminProductResource(productRepo, sessionManager)
         );
+
+
+
     }
 
     private static Map<String, String> loadConfigMapFromFile(String configPath) {

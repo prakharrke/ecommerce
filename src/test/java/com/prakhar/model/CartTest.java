@@ -48,7 +48,7 @@ public class CartTest {
         Cart cart = new Cart(person);
         when(personRepo.getCartFromPersonId(person)).thenReturn(cart);
         Cart cart1 = personRepo.getCartFromPersonId(person);
-        cartRepo.addCartItemToCart(cart, laptop);
+        //cartRepo.addCartItemToCart(cart, laptop);
 
         Assert.assertEquals(cart.getCartItems().size(), 1);
     }
