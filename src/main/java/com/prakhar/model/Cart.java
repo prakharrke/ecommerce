@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @javax.persistence.Entity
 @Table(name = "cart")
@@ -40,5 +41,9 @@ public class Cart extends Entity {
 
     public void addCartItem(CartItem cartItem) {
         cartItems.add(cartItem);
+    }
+
+    public Double getCartTotal() {
+        return cartItems.stream().map(CartItem::getCartItemTotal).collect(Collectors.summingDouble(Double::doubleValue));
     }
 }

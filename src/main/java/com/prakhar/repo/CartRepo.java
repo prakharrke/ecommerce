@@ -15,7 +15,7 @@ public class CartRepo extends AbstractRepo {
 
 
     public Optional<CartItem> findCartItemByCartAndProductId(Long cartId, Long productId) {
-        Query query = currentSession().createQuery("from CartItem where cartId= :cartId and productId= :productId ");
+        Query<CartItem> query = currentSession().createQuery("Select ci from CartItem ci where cartId= :cartId and productId= :productId ");
         query.setParameter("cartId", cartId)
                 .setParameter("productId", productId);
 

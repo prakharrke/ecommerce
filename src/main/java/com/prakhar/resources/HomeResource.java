@@ -129,8 +129,12 @@ public class HomeResource {
         Cart cart = person.getCart();
         if (cart == null) {
             cart = personService.createCartForPerson(person);
+            CartItem cartItem = new CartItem(cart, product, 1);
+            cart.addCartItem(cartItem);
+            cartRepo.save(cart);
+        } else {
+            cartService.addCartItemToCart(cart, product);
         }
-        cartService.addCartItemToCart(cart, product);
         return Response
                 .status(302)
                 .location(
@@ -144,7 +148,7 @@ public class HomeResource {
     @UnitOfWork
     public Response increaseCartItemCount(@Auth User user, @PersonInjector Person person, @PathParam("cartItemId") Long cartItemId) {
         Cart cart = person.getCart();
-        if(cart == null){
+        if (cart == null) {
             throw new RuntimeException("Cart is not present for the given user");
         }
 
@@ -166,7 +170,7 @@ public class HomeResource {
     @UnitOfWork
     public Response decreaseCartItemCount(@Auth User user, @PersonInjector Person person, @PathParam("cartItemId") Long cartItemId) {
         Cart cart = person.getCart();
-        if(cart == null){
+        if (cart == null) {
             throw new RuntimeException("Cart is not present for the given user");
         }
 
@@ -188,7 +192,7 @@ public class HomeResource {
     @UnitOfWork
     public Response removeCartItem(@Auth User user, @PersonInjector Person person, @PathParam("cartItemId") Long cartItemId) {
         Cart cart = person.getCart();
-        if(cart == null){
+        if (cart == null) {
             throw new RuntimeException("Cart is not present for the given user");
         }
 

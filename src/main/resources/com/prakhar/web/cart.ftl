@@ -11,7 +11,27 @@
                     <a href="/app/admin" class="nav-link">Admin Console</a>
                 </nav>
             </div>
+            <#if 1 <= view.getCart().getCartItems()?size >
+            <div class="card card-fluid mt-2">
+                <h6 class="card-header">Cart Summary</h6>
+                <div class="list-group list-group-bordered mb-3">
+                    <#list view.getCart().getCartItems() as cartItem>
+                    <div class="list-group-item list-group-item-action ">
+                        <div class="row">
+                            <div class="col-lg-8">${cartItem.getProduct().getModelNumber()} (${cartItem.getQuantity()})</div>
+                            <div class="col-lg-4 d-flex justify-content-center">${cartItem.getCartItemTotal()}</div>
+                        </div>
+                    </div>
+                    </#list>
+                </div>
+            <div class="card-footer d-flex d-flex justify-content-between">
+                <h5>Total</h5>
+                <h5>${view.getCart().getCartTotal()}</h5>
+            </div>
+            </div>
+            </#if>
         </div>
+
         <div class="col-lg-8">
             <#if view.getCart().getCartItems()?size < 1>
             <div class="card card-fluid">

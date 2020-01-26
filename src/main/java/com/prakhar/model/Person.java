@@ -37,7 +37,7 @@ public class Person extends Entity {
     @OrderBy("id")
     private List<BillingAddress> billingAddressList = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
+    @OneToOne(cascade = {CascadeType.ALL}, mappedBy = "person")
     private Cart cart;
 
     public Person(String username, String firstName, String lastName, String email, String password) {

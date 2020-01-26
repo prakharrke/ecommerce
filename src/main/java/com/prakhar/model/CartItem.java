@@ -53,4 +53,8 @@ public class CartItem  extends com.prakhar.model.Entity {
         }
         quantity -=1;
     }
+
+    public Double getCartItemTotal() {
+        return (product.getPrice() * quantity);
+    }
 }
