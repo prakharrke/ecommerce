@@ -98,6 +98,16 @@ public class BillingAddress extends Entity{
     public Person getPerson() {
         return person;
     }
+
+    public String toString() {
+        return new StringBuilder().append(addressLine1)
+                .append(", ")
+                .append(addressLine2)
+                .append(addressLine2.isEmpty() ? "" : ", ")
+                .append(city)
+                .append(", ")
+                .append(state).toString();
+    }
 }
 
 

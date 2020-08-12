@@ -9,16 +9,13 @@ import com.prakhar.repo.ProductRepo;
 import com.prakhar.service.CartService;
 import com.prakhar.service.PersonService;
 import com.prakhar.system.PersonInjector;
-import com.prakhar.web.BillingDetailsView;
-import com.prakhar.web.CartView;
-import com.prakhar.web.ProductDetailView;
+import com.prakhar.web.*;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import com.prakhar.auth.User;
 import com.prakhar.model.Person;
 import com.prakhar.repo.PersonRepo;
 import com.prakhar.utils.WebUtils;
-import com.prakhar.web.HomePageView;
 import org.apache.http.client.utils.URIBuilder;
 
 import javax.ws.rs.GET;
@@ -126,6 +123,7 @@ public class HomeResource {
                                      @PathParam("productId") Long productId) {
 
         Product product = productRepo.findProductById(productId).orElseThrow(() -> new RuntimeException("Could not find product by given productId"));
+
         Cart cart = person.getCart();
         if (cart == null) {
             cart = personService.createCartForPerson(person);
@@ -207,5 +205,19 @@ public class HomeResource {
                 .location(
                         UriBuilder.fromPath("/app/cart/").build()
                 ).build();
+    }
+
+    @GET
+    @Path("/cart/checkout")
+    @UnitOfWork
+    public CheckoutView getCartCheckout(@Auth User user, @PersonInjector Person person) {
+
+        Cart cart = person.getCart();
+        if (cart == null) {
+            cart = personService.createCartForPerson(person);
+        }
+
+        CheckoutView checkoutView = new CheckoutView("checkout.ftl", cart, person);
+        return checkoutView;
     }
 }
